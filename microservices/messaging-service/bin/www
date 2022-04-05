@@ -4,15 +4,17 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('messaging-service:server');
-var http = require('http');
+const app = require('../app');
+const dotenv = require('dotenv')
+const debug = require('debug')('messaging-service:server');
+const http = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
+dotenv.config();
 
-var port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
@@ -24,6 +26,14 @@ var server = http.createServer(app);
 /**
  * Listen on provided port, on all network interfaces.
  */
+
+
+ const io = require("socket.io")(server);
+
+
+ 
+
+ 
 
 server.listen(port);
 server.on('error', onError);
@@ -87,4 +97,8 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+  console.log(`Messaging service is listening on http://localhost:${addr.port}`);
+  io.on('Connection', (socket) => {
+    console.log("Connection made");
+  });
 }
