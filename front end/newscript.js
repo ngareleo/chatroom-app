@@ -1,9 +1,16 @@
- function editReview(){
-    const textarea = document.getElementById('userreview');
-    let badwords = /cunt|bitch|shit|dick|asshole|doc/gi;
-    let userreview1 = textarea.value;
-    let userreview2 = userreview1.replace(badwords, '######');
-    document.getElementById('userreview').value = userreview2;
-}
-document.getElementById('submittext').addEventListener('click', editReview)    
-    
+  function badword(){
+        var text = document.getElementById("text").value;
+        var arraynames = ['fuck','cunt','bitch','shit'];
+        
+        var badText = fieldValue.split(" ");
+        for (var name of badText){
+                for (var bdt of arraynames ){
+                    if(arraynames[i] != "" && name === bdt){
+                        alert("profanity detected");
+                        return false;
+                    }
+                }
+        }
+                
+    }
+           
