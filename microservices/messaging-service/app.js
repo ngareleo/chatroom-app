@@ -10,6 +10,7 @@ const secondUserRouter = require('./routes/second-user.js');
 
 const app = express();
 
+
 const handlebars = require('express3-handlebars')
 .create({ defaultLayout: 'main' });
 app.engine('handlebars', handlebars.engine);
@@ -20,7 +21,9 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

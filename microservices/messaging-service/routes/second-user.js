@@ -1,11 +1,18 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-/* GET home page. */
-router.get('/user1', function(req, res, next) {
+
+router.get('/user2', function(req, res, next) {
   res.json({
     "message": "Welcome user Two",
   });
 });
 
+router.post('/user2', (req, res, next) => {
+  console.log("Message is ", req.body);
+
+  return res.json({
+    "message": "Message recieved"
+  });
+});
 module.exports = router;
