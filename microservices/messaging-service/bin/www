@@ -7,7 +7,7 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const Schema = require('../models/message');
-const {cleanData} = require('../controller/scoket-worker');
+const cleanData = require('../controller/worker');
 const express = require('express');
 
 dotenv.config();
