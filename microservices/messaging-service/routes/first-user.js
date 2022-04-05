@@ -13,13 +13,13 @@ router.post('/user1', (req, res, next) => {
   const data = Object.assign({}, req.body);
   let cleanContent = profChecker(data.content);
   
-  let message = new Schema(
-    {
-      content: cleanContent,
-      user: "user1",
-      dateSent: new Date(),
-    }
-  );
+  const temp = {
+    content: cleanContent,
+    user: "user1",
+    dateSent: new Date(),
+  };
+  console.log(temp);
+  let message = new Schema(temp);
 
   message.save().catch((err) => {
     console.log(err);

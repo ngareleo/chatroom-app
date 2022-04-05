@@ -1,10 +1,17 @@
-<div class="main-container">
-    <form action="/user2" method="post">
-        <input type="text" name="content" id="content">
-        <input type="submit" value="Submit">
-    </form>
-</div>
 
+<header>
+    <center>Chatroom</center>
+</header>
+<div class="main-container">
+    <div class="user1-link">
+        <h1>Go to user 1</h1>
+        <a href="/user1">User1</a>
+    </div>
+    <div class="user2-link">
+        <h1>Go to user 2</h1>
+        <a href="/user2">User 2</a>
+    </div>
+</div>
 <script>
     const Socket = new WebSocket("http://localhost:5000");
 </script>
