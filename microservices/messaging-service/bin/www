@@ -1,47 +1,59 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
-
 const app = require('../app');
 const dotenv = require('dotenv')
 const debug = require('debug')('messaging-service:server');
 const http = require('http');
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const Schema = require('../models/message');
+const {cleanData} = require('../controller/scoket-worker');
+const express = require('express');
 
-/**
- * Get port from environment and store in Express.
- */
 dotenv.config();
 
 const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
-/**
- * Create HTTP server.
- */
 
-var server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
+const io = new Server(server);
 
 
- const io = require("socket.io")(server);
+io.on('connection', async (socket) => {
+  let data = await Schema.find({});
+  let user1ID, user2ID;
+  socket.emit('user-information');
+  socket.emit('data', cleanData(data));
+  socket.on('disconnect', (reason) => {
+    if (user1ID != undefined && socket.id === user1ID){
+      console.log(`User 1 has disconnected`);
+      user1ID = undefined;
+    }
+    else if (user2ID != undefined && socket.id === user2ID){
+      console.log(`User 2 has disconnected`);
+      user2ID = undefined;
+    }
+  });
+
+  socket.on("user-info", (data) => {
+    const pn = data.pathname;
+    if (pn != undefined && pn === "/user1"){
+      user1ID = socket.id;
+      console.log("User 1 has connected");
+    }else if (pn != undefined & pn === "/user2"){
+      user2ID = socket.id;
+      console.log("User 2 has connected");
+    }
+  });
+
+});
 
 
- 
-
- 
 
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-/**
- * Normalize a port into a number, string, or false.
- */
 
 function normalizePort(val) {
   var port = parseInt(val, 10);
@@ -59,9 +71,6 @@ function normalizePort(val) {
   return false;
 }
 
-/**
- * Event listener for HTTP server "error" event.
- */
 
 function onError(error) {
   if (error.syscall !== 'listen') {
@@ -87,9 +96,6 @@ function onError(error) {
   }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
 
 function onListening() {
   var addr = server.address();

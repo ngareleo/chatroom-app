@@ -1,5 +1,5 @@
-const checkContent = (content) => {
-    return content;
+const checkContent = () => {
+
 }
 
 module.exports = checkContent;
