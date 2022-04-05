@@ -77,7 +77,7 @@ flex-direction: row;
     padding: 5px 15px;
     background-color: antiquewhite;
 }
-..message-user h5{
+.message-user h5{
     color: #f3d82d;
 }
 
