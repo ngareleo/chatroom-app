@@ -1,10 +1,11 @@
+<header>
+    <h1>{{user}}</h1>
+</header>
 <div class="main-container">
-    <form action="/user2" method="post">
+    
+    <form action="/{{user}}" method="post">
         <input type="text" name="content" id="content">
+        <br>
         <input type="submit" value="Submit">
     </form>
 </div>
-
-<script>
-    const Socket = new WebSocket("http://localhost:5000");
-</script>
