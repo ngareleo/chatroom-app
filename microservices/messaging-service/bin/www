@@ -22,16 +22,24 @@ const io = new Server(server);
 io.on('connection', async (socket) => {
   let data = await Schema.find({});
   let user1ID, user2ID;
+  socket.on("message-sent", async (dt) => {
+    let data = await Schema.find({});
+    socket.emit('data', cleanData(data));
+    socket.broadcast.emit('data', cleanData(data));
+  });
+
   socket.emit('user-information');
   socket.emit('data', cleanData(data));
   socket.on('disconnect', (reason) => {
     if (user1ID != undefined && socket.id === user1ID){
       console.log(`User 1 has disconnected`);
       user1ID = undefined;
+      socket.emit("u1-offline");
     }
     else if (user2ID != undefined && socket.id === user2ID){
       console.log(`User 2 has disconnected`);
       user2ID = undefined;
+      socket.emit("u2-offline");
     }
   });
 
@@ -40,9 +48,11 @@ io.on('connection', async (socket) => {
     if (pn != undefined && pn === "/user1"){
       user1ID = socket.id;
       console.log("User 1 has connected");
+      socket.emit("u1-online");
     }else if (pn != undefined & pn === "/user2"){
       user2ID = socket.id;
       console.log("User 2 has connected");
+      socket.emit("u2-online");
     }
   });
 

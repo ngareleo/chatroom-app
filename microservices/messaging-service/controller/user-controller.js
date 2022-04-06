@@ -1,8 +1,7 @@
 const checkContent = (content) => {
-    const curseWords = ["shit"];
-
-    for (var word in curseWords) {
-        content = content.replace(word, "#".repeat(word.length));
+    const curseWords = ["shit", "fuck", "bitch", "ass", "nigga"];
+    for (var word of curseWords) {
+        content = content.replace(word, "*".repeat(word.length));
     }
     return content;
 }

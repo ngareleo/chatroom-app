@@ -5,178 +5,109 @@
     <div class= "header">
         <div class="user-profile">
             <div class="icon">
-                <img src="images/20210514_171656.jpg" width="130" height="130">
+                <img src={{profile}} width="130" height="130">
             </div>
             <div class="name">
-                <p>User 1</p>
+                <p>{{username}}</p>
             </div>
             <div class="status">
-                <p>Online</p>
+                <p id="status">Offline</p>
             </div>
         </div>
     </div>
     <div class="chat-container">
+        <!--Chats go here
         <div class="message">
             <p>Hey douchebag, hows it going</p>
         </div> 
         <div class="message user_message">
             <p>Hey cunt</p>
-        </div>        
+        </div>-->
     </div>
     <div class="footer">
-        <form action="">
-            <input type="text" name="">
-                <button>SEND</button>
+        <form action="/{{user}}" method="post" id="form">
+            <input type="text" name="chat" id="chat">
+            <button id="send-button">Send</button>
         </form>
     </div>  
 </div>
-<style>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
 
-</style>
-<style>
-*{
-margin: 0;
-padding: 0;
-font-family: 'poppins' , sans-serif;
-box-sizing: border-box;
-}
+    var socket = io();
+    const chatContainer = document.querySelector(".chat-container");
+    const sendButton = document.querySelector("#send-button");
+    const currentUser = (document.location.pathname === "/user1") ? "user1" : "user2";
+    const form = document.querySelector("#form");
+    const removeAllChildNodes = (parent) => {
+        while (parent.firstChild) {
+            parent.removeChild(parent.firstChild);
+        }
+    }
+    
+    
+    socket.on("data", (data) => {
+        removeAllChildNodes(chatContainer);
+        for (var item of data) {
+            if (item.user === currentUser) {
+                const child = document.createElement("div");
+                child.setAttribute("class", "message user_message");
+                const pChild = document.createElement("p");
+                pChild.innerHTML = item.content;
+                child.appendChild(pChild);
+                chatContainer.appendChild(child);
 
-body{
-    height: 100vh;
-    background: #dae3e2;
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-}
+            }else {
+                const child = document.createElement("div");
+                child.setAttribute("class", "message");
+                const pChild = document.createElement("p");
+                pChild.innerHTML = item.content;
+                child.appendChild(pChild);
+                chatContainer.appendChild(child);
+            }
+        }        
+    });
 
-/* navigation bar*/
-/* nav{
-    /* align-items: center; */
-    /* justify-content: space-between; 
-    background:#55d3c2;
-    padding: 2px 2%;
-    position: sticky;
-    top: 0;
-    z-index: 0;
-    margin-left: 100px;
-    margin-right: 100px;
-   
-}
-*/
+    socket.on("user-information", () => {
+        socket.emit("user-info", document.location);
+    });
 
-.container{
-    width: 70vw;
-    height: 95vh;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 2px 2px 20px rgba(0,0,0,0.5);
-    background: #ccaf83;
-}
+    socket.on("u1-offline", () => {
+        if (document.location.pathname === "/user2")
+            document.querySelector("#status").innerHTML = "Offline";
+    });
 
-.logo-container{
-    width: 100%;
-    height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-}
+    socket.on("u2-offline", () => {
+        if (document.location.pathname === "/user1")
+            document.querySelector("#status").innerHTML = "Offline";
+    });
 
-.header {
-    width: auto;
-    margin: 10px;
-    display: flex;
-    align-items: center;
-}
+    socket.on("u1-online", () => {
+        if (document.location.pathname === "/user2")
+            document.querySelector("#status").innerHTML = "Online";
+    });
 
-.user-profile{
-    display: flex;
-    flex-basis: 50%;
-    align-items: center;
-}
+    socket.on("u2-online", () => {
+        if (document.location.pathname === "/user1")
+            document.querySelector("#status").innerHTML = "Online";
+    });
+    
+    /*
+        Events
+    */
+    sendButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        axios.post(document.location.pathname, {
+            content: document.querySelector("#chat").value,}
+        ).then((res) => {
+            if (res.data.message == "OK"){
+                socket.emit("message-sent", "Message sent");
+                form.reset();
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+    });
 
-.icon{
-    margin: 5px;
-    flex-basis: 10%;
-}
-
-.name{
-    margin-left: 5px;
-    flex-basis: 90%;
-}
-
-.status{
-    flex-basis: 80%;
-}
-
-.icon img{
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    cursor: pointer;
-}
-/* .user-profile name p{
-    margin-left: 10px;
-    font-weight: 800;
-        
-} */
-
-
-
-/*---chat-----*/
-.chat-container{
-    flex: 1;
-    color:  #fef8ef;
-    padding: 20px 30px;
-}
-
-.message{
-    color: black;
-    width: fit-content;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    padding: 15px;
-    background-color: antiquewhite;
-}
-/* .message-reciever h5{
-    color: #3882a6;
-    padding-bottom: 5px;
-} */
-.user_message{
-    margin-left: auto;
-    background-color: #fff;
-    color: black;
-}
-/* .message-user h5{
-    color: #f3d82d;
-    padding-bottom: 5px;
-} */
-
-
-.footer form{
-    display: flex;
-}
-
-form input{
-    flex: 1;
-    height: 40px;
-    border: none;
-    outline: none;
-    padding-left: 5px;
-    font-size: 16px;
-}
-
-form button{
-    width: 100px;
-    font-size: 18px;
-    border: none;
-    outline: none;
-    background-color: grey;
-    color: white;
-    cursor: pointer;
-}
-
-form button:hover{
-    background-color: green;
-    transition: 0.2s ease;
-}
-</style>  
+</script>

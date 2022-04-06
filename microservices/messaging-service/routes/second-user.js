@@ -5,7 +5,7 @@ const profChecker = require('../controller/user-controller');
 
 /* GET home page. */
 router.get('/user2', function(req, res, next) {
-  res.render("action", {user: "User2"});
+  res.render("action", {user: "user2", username: "User Two", profile: "/images/20210514_171656.jpg"});
 });
 
 router.post('/user2', (req, res, next) => {
@@ -27,7 +27,7 @@ router.post('/user2', (req, res, next) => {
 
   // done
   return res.json({
-    "message": "Message recieved"
+    "message": "OK"
   });
 });
 

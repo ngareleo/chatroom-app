@@ -5,4 +5,7 @@ const cleanData = (data) => {
             finalData.push(item);
         }
     }
+    return finalData;
 }
+
+module.exports = cleanData;
