@@ -50,16 +50,19 @@ io.on('connection', async (socket) => {
     }
   });
 
+
+  socket.on("typing", (data) => {
+    let message  = `${(data == 'user1') ? 'User One' : 'User Two'} is typing...`;
+    socket.broadcast.emit('userTyping', message);
+    console.log(`${data} is typing`);
+  });
+
 });
 
 
 //configurations
-const port = normalizePort(process.env.PORT || '3000');
+
 dotenv.config();
-app.set('port', port);
-server.listen(port, '0.0.0.0');
-server.on('error', onError);
-server.on('listening', onListening);
 
 
 const normalizePort = (val) => {
@@ -77,6 +80,10 @@ const normalizePort = (val) => {
   return false;
 }
 
+const port = normalizePort(process.env.PORT || '3000');
+
+app.set('port', port);
+server.listen(port, '0.0.0.0');
 
 const onError = (error) => {
   if (error.syscall !== 'listen') {
@@ -114,3 +121,7 @@ const onListening = () => {
     console.log("Connection made");
   });
 }
+
+
+server.on('error', onError);
+server.on('listening', onListening);
