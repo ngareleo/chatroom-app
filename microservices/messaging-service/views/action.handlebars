@@ -1,140 +1,71 @@
 <div class="container">
-    <div class="logo-container">
-        <img src="images/sociallyKay-logos_white(1).png" class="logo" width="125" height="30">
-    </div>
-    <div class="main-container">
-        <div class="user-area">
-            <div class="user-header">
-                <h3>People</h3>
-            </div>
-            <div class="user-select" onclick="window.location = '/user1'">
-                <div class="user-picture">
-                    <img src="images/member-1.png" width="50" height="50">
-                </div>
-                <a href="/user1" >User 1</a>
-            </div>
-            <div class="user-select" onclick="window.location = '/user2'">
-                <div class="user-picture">
-                    <img src="images/member-7.png" width="50" height="50">
-                </div>
-                <a href="/user2" >User 2</a>
-            </div>
+  <div class="logo-container">
+    <img
+      src="images/sociallyKay-logos_white(1).png"
+      class="logo"
+      width="125"
+      height="30"
+    />
+  </div>
+  <div class="main-container">
+    <div class="user-area">
+      <div class="user-header">
+        <h3>People</h3>
+      </div>
+      {{#if user1}}
+        <div class="user-select" onclick="window.location = '/user2'">
+          <div class="user-picture">
+            <img src="images/member-7.png" width="50" height="50" />
+          </div>
+          <a href="/user2">User Two</a>
         </div>
-        <div class="chat-area">
-            <div class= "header">
-                <div class="user-profile">
-                    <div class="holder-container">
-                        <div class="icon">
-                            <img src={{profile}} width="130" height="130">
-                        </div>
-                        <div class="name">
-                            <p>{{username}}</p>
-                        </div>
-                    </div>
-                    <div class="status">
-                        <p id="status">Online</p>
-                    </div>
-                </div>
-            </div>
-            <div class="chat-container"> 
-            </div>
-            <div class="footer">      
-                <form action="/{{user}}" method="post" id="form">
-                    <input type="text" name="chat" id="chat" placeholder="Say something clean" autocomplete="off">
-                    <button id="send-button">Yeet</button>
-                </form>
-            </div>  
+      {{else}}
+        <div class="user-select" onclick="window.location = '/user1'">
+          <div class="user-picture">
+            <img src="images/member-1.png" width="50" height="50" />
+          </div>
+          <a href="/user1">User One</a>
         </div>
+      {{/if}}
+
     </div>
+    <div class="chat-area">
+      <div class="header">
+        <div class="user-profile">
+          <div class="holder-container">
+            <div class="icon">
+              <img src={{profile}} width="130" height="130" />
+            </div>
+            <div class="name">
+              <p>{{username}}</p>
+            </div>
+          </div>
+          <div class="status">
+            {{#if user1}}
+              <p id="status">User Two is offline</p>
+            {{else}}
+              <p id="status">User One is offline</p>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      <div class="chat-container">
+      </div>
+      <div class="footer">
+        <form action="/{{user}}" method="post" id="form">
+          <input
+            type="text"
+            name="chat"
+            id="chat"
+            placeholder="Say something clean"
+            autocomplete="off"
+          />
+          <button id="send-button">Yeet</button>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-
-    var socket = io();
-    const chatContainer = document.querySelector(".chat-container");
-    const sendButton = document.querySelector("#send-button");
-    const currentUser = (document.location.pathname === "/user1") ? "user1" : "user2";
-    const form = document.querySelector("#form");
-    const removeAllChildNodes = (parent) => {
-        while (parent.firstChild) {
-            parent.removeChild(parent.firstChild);
-        }
-    }
-    const textBox = document.querySelector("#chat");
-
-    
-    
-    socket.on("data", (data) => {
-        removeAllChildNodes(chatContainer);
-        for (var item of data) {
-            if (item.user === currentUser) {
-                const child = document.createElement("div");
-                child.setAttribute("class", "message user_message");
-                const pChild = document.createElement("p");
-                pChild.innerHTML = item.content;
-                child.appendChild(pChild);
-                chatContainer.appendChild(child);
-
-            }else {
-                const child = document.createElement("div");
-                child.setAttribute("class", "message");
-                const pChild = document.createElement("p");
-                pChild.innerHTML = item.content;
-                child.appendChild(pChild);
-                chatContainer.appendChild(child);
-            }
-        }        
-    });
-
-    socket.on("user-information", () => {
-        socket.emit("user-info", document.location);
-    });
-
-    socket.on("u1-offline", () => {
-        if (document.location.pathname === "/user2")
-            document.querySelector("#status").innerHTML = "Offline";
-    });
-
-    socket.on("u2-offline", () => {
-        if (document.location.pathname === "/user1")
-            document.querySelector("#status").innerHTML = "Offline";
-    });
-
-    socket.on("u1-online", () => {
-        console.log(document.querySelector("#status"));
-        if (document.location.pathname === "/user2")
-            document.querySelector("#status").innerHTML = "Online";
-    });
-
-    socket.on("u2-online", () => {
-        if (document.location.pathname === "/user1")
-            document.querySelector("#status").innerHTML = "Online";
-    });
-
-    socket.on("userTyping", (data) => {
-        document.querySelector("#status").innerHTML = data;
-        setTimeout(() => {
-            document.querySelector("#status").innerHTML = "Online";
-        }, 500);
-    });
-
-    textBox.addEventListener("input", (event) => {
-       socket.emit("typing", currentUser);
-    });
-
-    sendButton.addEventListener("click", (event) => {
-        event.preventDefault();
-        axios.post(document.location.pathname, {
-            content: document.querySelector("#chat").value,}
-        ).then((res) => {
-            if (res.data.message == "OK"){
-                socket.emit("message-sent", "Message sent");
-                form.reset();
-            }
-        }).catch((err) => {
-            console.log(err);
-        });
-    });
-
-</script>
+<script src="/javascripts/action.js"></script>
