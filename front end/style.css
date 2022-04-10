@@ -47,10 +47,62 @@ body{
     justify-content: center;
 }
 
+/* index page css */
+.home-container{
+    /* Look, I tried making it 100 
+    but the logo keeps pushing out the bottom part*/
+    height: 96%;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #fee9d7;
+    /* background-image: url(images/outer-space-lockscreen-black-amp-white-Favim.com-6980772.jpg); */
+}
+
+.profile-head-container{
+}
+
+.profile-container{
+    display: flex;
+    align-items: center;
+}
+
+.profile-head{
+    align-self: center;
+}
+
+.home-profile{
+    margin: 5px;
+    padding: 5px;
+}
+
+.home-profile:hover{
+    cursor: pointer;
+    background-color: #ebd7c6;
+    box-shadow: 1px 1px 10px rgba(0,0,0,0.3);
+    transition: 0.3s ease;
+}
+
+.profile-pic{
+    width: 200px;
+    height: 200px;
+    margin: 5px;
+    border-radius: 5%;
+}
+
+.username{
+    margin: 5px;
+    color: black;
+    text-align: center;
+}
+
+/* user pages css */
 .main-container{
     /* Look, I tried making it 100 
     but the logo keeps pushing out the bottom part*/
-    height: 97%;
+    height: 96%;
     display: flex;
     flex-direction: row;
     background-color: gray;
@@ -214,6 +266,7 @@ form input{
     background-color: #e9b85d;
     
 }
+
 form input::placeholder{
     color: rgb(97, 95, 95);
 }
