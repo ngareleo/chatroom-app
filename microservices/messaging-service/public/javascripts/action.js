@@ -28,6 +28,7 @@ socket.on("data", (data) => {
       chatContainer.appendChild(child);
     }
   }
+  chatContainer.scrollTop = chatContainer.scrollHeight;
 });
 const US1onlineMsg = "User One is online",
   US2onlineMsg = "User Two is online",
@@ -60,7 +61,7 @@ socket.on("userTyping", (data) => {
   document.querySelector("#status").innerHTML = data;
   setTimeout(() => {
     document.querySelector("#status").innerHTML = "Online";
-  }, 500);
+  }, 2000);
 });
 textBox.addEventListener("input", (event) => {
   socket.emit("typing", currentUser);

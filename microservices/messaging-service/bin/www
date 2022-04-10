@@ -1,36 +1,34 @@
 #!/usr/bin/env node
 
 //imports
-const app = require('../app');
-const dotenv = require('dotenv')
-const debug = require('debug')('messaging-service:server');
-const http = require('http');
+const app = require("../app");
+const dotenv = require("dotenv");
+const debug = require("debug")("messaging-service:server");
+const http = require("http");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const Schema = require('../models/message');
-const cleanData = require('../controller/worker');
-const express = require('express');
-
+const Schema = require("../models/message");
+const cleanData = require("../controller/worker");
+const express = require("express");
 
 //sockets config
 const io = new Server(server);
-io.on('connection', async (socket) => {
+io.on("connection", async (socket) => {
   let data = await Schema.find({});
   let user1ID, user2ID;
   socket.on("message-sent", async (dt) => {
     let data = await Schema.find({});
-    socket.emit('data', cleanData(data));
-    socket.broadcast.emit('data', cleanData(data));
+    socket.emit("data", cleanData(data));
+    socket.broadcast.emit("data", cleanData(data));
   });
-  socket.emit('user-information');
-  socket.emit('data', cleanData(data));
-  socket.on('disconnect', (reason) => {
-    if (user1ID != undefined && socket.id === user1ID){
+  socket.emit("user-information");
+  socket.emit("data", cleanData(data));
+  socket.on("disconnect", (reason) => {
+    if (user1ID != undefined && socket.id === user1ID) {
       console.log(`User 1 has disconnected`);
       user1ID = undefined;
       socket.broadcast.emit("u1-offline");
-    }
-    else if (user2ID != undefined && socket.id === user2ID){
+    } else if (user2ID != undefined && socket.id === user2ID) {
       console.log(`User 2 has disconnected`);
       user2ID = undefined;
       socket.broadcast.emit("u2-offline");
@@ -39,31 +37,26 @@ io.on('connection', async (socket) => {
 
   socket.on("user-info", (data) => {
     const pn = data.pathname;
-    if (pn != undefined && pn === "/user1"){
+    if (pn != undefined && pn === "/user1") {
       user1ID = socket.id;
       console.log("User 1 has connected");
       socket.broadcast.emit("u1-online");
-    }else if (pn != undefined & pn === "/user2"){
+    } else if ((pn != undefined) & (pn === "/user2")) {
       user2ID = socket.id;
       console.log("User 2 has connected");
       socket.broadcast.emit("u2-online");
     }
   });
 
-
   socket.on("typing", (data) => {
-    let message  = `${(data == 'user1') ? 'User One' : 'User Two'} is typing...`;
-    socket.broadcast.emit('userTyping', message);
-    console.log(`${data} is typing`);
+    let message = `${data == "user1" ? "User One" : "User Two"} is typing...`;
+    socket.broadcast.emit("userTyping", message);
   });
-
 });
-
 
 //configurations
 
 dotenv.config();
-
 
 const normalizePort = (val) => {
   let port = parseInt(val, 10);
@@ -78,50 +71,46 @@ const normalizePort = (val) => {
   }
 
   return false;
-}
+};
 
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(process.env.PORT || "3000");
 
-app.set('port', port);
-server.listen(port, '0.0.0.0');
+app.set("port", port);
+server.listen(port, "0.0.0.0");
 
 const onError = (error) => {
-  if (error.syscall !== 'listen') {
+  if (error.syscall !== "listen") {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
       process.exit(1);
       break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
       process.exit(1);
       break;
     default:
       throw error;
   }
-}
-
+};
 
 const onListening = () => {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-  console.log(`Messaging service is listening on http://localhost:${addr.port}`);
-  io.on('Connection', (socket) => {
+  var bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+  debug("Listening on " + bind);
+  console.log(
+    `Messaging service is listening on http://localhost:${addr.port}`
+  );
+  io.on("Connection", (socket) => {
     console.log("Connection made");
   });
-}
+};
 
-
-server.on('error', onError);
-server.on('listening', onListening);
+server.on("error", onError);
+server.on("listening", onListening);
