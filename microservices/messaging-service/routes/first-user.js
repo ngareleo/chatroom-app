@@ -5,7 +5,7 @@ const profChecker = require('../controller/user-controller');
 
 /* GET home page. */
 router.get('/user1', function(req, res, next) {
-  res.render("action", {user: "User1", username: "User One", profile: "images/photo6.png"});
+  res.render("action", {user: "User1", username: "User One", profile: "images/member-1.png"});
 
 });
 

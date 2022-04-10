@@ -5,68 +5,134 @@
     box-sizing: border-box;
 }
 
-P, input, button, h{
-    font-family: 'Inter', sans-serif;
-}
-
 body{
-    height: 100vh;
-    background: #dae3e2;
+    height: auto;
+    background: #fee9d7;
     display: flex;
     justify-content: center;
     align-items: center; 
 }
 
-
 .container{
-    width: 70vw;
-    height: 95vh;
+    width: 80vw;
+    height: 90%;
     display: flex;
     flex-direction: column;
     box-shadow: 2px 2px 20px rgba(0,0,0,0.5);
-    background: #ccaf83;
+    background: #eabd6a;
+    overflow: hidden;
 }
 
 .logo-container{
     width: 100%;
-    height: auto;
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+}
+
+.main-container{
+    /* Look, I tried making it 100 
+    but the logo keeps pushing out the bottom part*/
+    height: 97%;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    background-color: gray;
+}
+
+.user-area{
+    flex-basis: 30%;
+    display: flex;
+    flex-direction: column;
+    background-color: #fee9d7;
+}
+
+.user-header{
+    height: 80px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    color: rgb(0, 0, 0);
+    background-color: #e9b85d;
+    
+}
+.user-select{
+    height: 70px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    color: rgb(0, 0, 0);
+    border-bottom: 2px groove #eddcbd;
+    cursor: pointer;
+}
+
+.user-select a{
+    text-decoration: none;
+    color: black;
+}
+
+.user-picture{
+    padding: 5px;
+    border-radius: 50%;
+}
+.user-picture img{
+border-radius: 50%;
+}
+
+
+.user-select:hover{
+    background-color: #e9d6c5;
+    transition: 0.4s ease;
+}
+
+.chat-area{
+    display: flex;
+    flex-direction: column;
+    flex-basis: 80%;
+    background-image: url(/images/outer-space-lockscreen-black-amp-white-Favim.com-6980772.jpg);
+}
+
+.home-logo{
+    width: 100%;
+    height: 100%;
+    align-self: center;
 }
 
 .header {
     width: 100%;
+    height: 80px;
+    padding: 10px;
     display: flex;
     align-items: center;
+    background-color:#e9b85d;
 }
 
 .user-profile{
     width: 100%;
     display: flex;
-    align-items: center;
+    flex-direction: row;
     justify-content: space-between;
-    padding: 0;
+    align-items: center;
 }
 
 .icon{
     margin: 5px;
-    flex-basis: 7%;
+    flex-basis: 5%;
 }
 
 .name{
-    font-size: 18px;
-    margin-left: 5px;
-    flex-basis: 93%;
-}
-
-.status p, .name p{
-    font-weight: bold;
+    text-align: left;
+    flex-basis: 80%;
+    color: black;
 }
 
 .status{
-    width: auto;
-    margin: 30px;
+    flex-basis: 10%;
+}
+
+.status p{
+    font-weight: 700;
+    text-align: center;
 }
 
 .icon img{
@@ -76,49 +142,47 @@ body{
     cursor: pointer;
 }
 
+/*---chat-----*/
 .chat-container{
-    flex: 1;
+    width: 100%;
+    height: 100%;
     color:  #fef8ef;
-    padding: 20px;
-    overflow-y: scroll;
-    background-color: #cc9d55;
-    scroll-behavior: smooth;
+    padding: 10px 15px;
+    background-size: cover;
+    opacity: 100%;
+    overflow-y: auto;
 }
 
-::-webkit-scrollbar {
+.chat-container::-webkit-scrollbar{
     width: 10px;
 }
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
+.chat-container::-webkit-scrollbar-track{
+    background: black;
 }
-
-::-webkit-scrollbar-thumb {
-    background: #888;
+.chat-container::-webkit-scrollbar-thumb{
+    background: #fee9d7;
 }
-
-::-webkit-scrollbar-thumb:hover {
+.chat-container::-webkit-scrollbar-thumb:hover{
     background: #555;
 }
 
 .message{
-    color: black;
+    color: rgb(255, 255, 255);
     width: fit-content;
-    border-bottom-right-radius: 10px;
-    margin-bottom: 5px;
-    padding: 15px;
-    background-color: antiquewhite;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #6A97EA;
 }
 
 .user_message{
     margin-left: auto;
-    background-color: #fff;
+    background-color: #f9de8d;
     color: black;
 }
 
-.message.user_message{
-    border-radius: 0;
-    border-bottom-left-radius: 10px;
+.message-media{
+    margin-bottom: 10px;
 }
 
 .footer form{
@@ -127,30 +191,52 @@ body{
 
 form input{
     flex: 1;
-    height: 40px;
+    height: 50px;
     border: none;
+    border-radius: 10px;
     outline: none;
-    padding-left: 5px;
+    margin: 10px;
+    padding-left: 20px;
     font-size: 16px;
+    background-color: #e9b85d;
+    
+}
+form input::placeholder{
+    color: rgb(97, 95, 95);
 }
 
 form button{
     width: 100px;
     font-size: 18px;
     border: none;
+    border-radius: 10px;
     outline: none;
-    background-color: grey;
+    margin: 10px;
+    background-color: #6A97EA;
     color: white;
     cursor: pointer;
 }
 
 form button:hover{
     background-color: green;
-    transition: 0.2s ease;
+    transition: 0.4s ease;
 }
 
 
+@media screen and (max-width: 500px) {
+    .container{
+        width: 100vw;
+        height: 100%;
+    }
 
+    .user-area{
+        display: none;
+    }
+
+    .chat-area{
+        flex-basis: 100%;
+    }
+}
 
 
 

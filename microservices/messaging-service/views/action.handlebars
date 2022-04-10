@@ -2,34 +2,48 @@
     <div class="logo-container">
         <img src="images/sociallyKay-logos_white(1).png" class="logo" width="125" height="30">
     </div>
-    <div class= "header">
-        <div class="user-profile">
-            <div class="icon">
-                <img src={{profile}} width="130" height="130">
+    <div class="main-container">
+        <div class="user-area">
+            <div class="user-header">
+                <h3>People</h3>
             </div>
-            <div class="name">
-                <p>{{username}}</p>
+            <div class="user-select" onclick="window.location = '/user1'">
+                <div class="user-picture">
+                    <img src="images/member-1.png" width="50" height="50">
+                </div>
+                <a href="/user1" >User 1</a>
             </div>
-            <div class="status">
-                <p id="status">Offline</p>
+            <div class="user-select" onclick="window.location = '/user2'">
+                <div class="user-picture">
+                    <img src="images/member-7.png" width="50" height="50">
+                </div>
+                <a href="/user2" >User 2</a>
             </div>
         </div>
+        <div class="chat-area">
+            <div class= "header">
+                <div class="user-profile">
+                    <div class="icon">
+                        <img src={{profile}} width="130" height="130">
+                    </div>
+                    <div class="name">
+                        <p>{{username}}</p>
+                    </div>
+                    <div class="status">
+                        <p id="status">Online</p>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-container"> 
+            </div>
+            <div class="footer">      
+                <form action="/{{user}}" method="post" id="form">
+                    <input type="text" name="chat" id="chat" placeholder="Say something clean" autocomplete="off">
+                    <button id="send-button">Yeet</button>
+                </form>
+            </div>  
+        </div>
     </div>
-    <div class="chat-container">
-        <!--Chats go here
-        <div class="message">
-            <p>Hey douchebag, hows it going</p>
-        </div> 
-        <div class="message user_message">
-            <p>Hey cunt</p>
-        </div>-->
-    </div>
-    <div class="footer">
-        <form action="/{{user}}" method="post" id="form">
-            <input type="text" name="chat" id="chat">
-            <button id="send-button">Send</button>
-        </form>
-    </div>  
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -84,6 +98,7 @@
     });
 
     socket.on("u1-online", () => {
+        console.log(document.querySelector("#status"));
         if (document.location.pathname === "/user2")
             document.querySelector("#status").innerHTML = "Online";
     });
@@ -92,10 +107,7 @@
         if (document.location.pathname === "/user1")
             document.querySelector("#status").innerHTML = "Online";
     });
-    
-    /*
-        Events
-    */
+
     sendButton.addEventListener("click", (event) => {
         event.preventDefault();
         axios.post(document.location.pathname, {
