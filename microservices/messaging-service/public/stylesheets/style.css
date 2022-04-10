@@ -1,7 +1,7 @@
 *{
     margin: 0;
-    padding: 0;
-    font-family: 'poppins' , sans-serif;
+    padding: 0; 
+    font-family: 'Inter', sans-serif;
     box-sizing: border-box;
 }
 
@@ -115,22 +115,29 @@ border-radius: 50%;
     align-items: center;
 }
 
+.holder-container{
+    width: auto;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
 .icon{
     margin: 5px;
-    flex-basis: 5%;
 }
 
 .name{
     text-align: left;
-    flex-basis: 80%;
     color: black;
 }
 
 .status{
-    flex-basis: 10%;
+    width: auto;
 }
 
 .status p{
+    width: auto;
     font-weight: 700;
     text-align: center;
 }
